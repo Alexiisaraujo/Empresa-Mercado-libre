@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mercado Libre — Investigación interactiva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B1622;--navy2:#142638;--y:#FFE600;--blue:#3483FA;--bg:#F5F7F9;--card:#fff;--tx:#111;--mu:#667085;--bd:#e4e8ee;--sh:0 1px 2px rgba(11,22,34,.05),0 6px 18px rgba(11,22,34,.05);--r:14px;--side:256px;--f:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--fd:'Fraunces',Georgia,'Times New Roman',serif}
+:root[data-theme=dark]{--bg:#0B1622;--card:#142638;--tx:#eef2f7;--mu:#9fb0c3;--bd:#21384f;--sh:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.25)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;font-family:var(--f);background:var(--bg);color:var(--tx);line-height:1.6;font-size:16px}
+a{color:var(--blue)}h1,h2,h3,h4{line-height:1.2;margin:0}
+.side{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--navy);color:#cdd8e4;display:flex;flex-direction:column;z-index:50;transition:transform .25s}
+.brand{padding:22px 20px 14px;display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1}
+.hand{width:38px;height:38px;border-radius:50%;background:var(--y);display:grid;place-items:center;color:var(--navy);font-weight:800;font-size:15px;flex:none}
+.nav{overflow-y:auto;flex:1;padding:6px 10px 10px;scrollbar-width:thin}
+.nav a{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:9px;color:#b8c6d6;text-decoration:none;font-size:13px;font-weight:500}
+.nav a:before{content:"";width:7px;height:7px;border-radius:50%;background:#3b5169;flex:none}
+.nav a:hover{background:var(--navy2);color:#fff}
+.nav a.on{background:var(--navy2);color:#fff}.nav a.on:before{background:var(--y)}
+.sideb{padding:12px;border-top:1px solid #20364b;display:grid;gap:8px}
+.sideb input{width:100%;background:var(--navy2);border:1px solid #2a435b;border-radius:9px;color:#fff;padding:9px 12px;font:inherit;font-size:13px}
+.sideb input::placeholder{color:#7e93a8}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;padding:12px 20px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.btn.y{background:var(--y);color:#111}.btn.y:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(255,230,0,.25)}
+.btn.g{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}.btn.g:hover{background:rgba(255,255,255,.14)}
+.btn.s{background:var(--navy2);color:#fff;padding:9px 12px;font-size:13px;justify-content:center}
+.top{display:none;position:fixed;top:0;left:0;right:0;height:54px;background:var(--navy);z-index:40;align-items:center;padding:0 14px;gap:12px;color:#fff;font-weight:800}
+.burger{background:none;border:0;color:#fff;font-size:24px;cursor:pointer}
+main{margin-left:var(--side)}
+section{padding:72px 56px;border-bottom:1px solid var(--bd)}
+section.dk{background:var(--navy);color:#e8eef5;border-color:#1c3146}
+.in{max-width:1080px;margin:0 auto}
+.kick{display:inline-block;background:var(--y);color:#111;font-weight:700;font-size:12px;padding:3px 10px;border-radius:99px;margin-bottom:14px}
+h2{font-family:var(--fd);font-size:clamp(28px,3.4vw,42px);font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.lead{color:var(--mu);font-size:18px;max-width:70ch;margin:0 0 30px}.dk .lead{color:#a9bacb}
+h3{font-size:19px;margin-bottom:8px}
+p{margin:0 0 12px;max-width:74ch}
+.hero{min-height:100vh;padding:0;display:flex;flex-direction:column;background:var(--navy);color:#fff;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(900px 420px at 80% 10%,rgba(52,131,250,.22),transparent 60%),linear-gradient(115deg,rgba(11,22,34,.2),rgba(11,22,34,.9)),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 88px),repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 88px)}
+.hero .in{position:relative;padding:90px 56px 40px;flex:1;display:flex;flex-direction:column;justify-content:center;width:100%}
+.logo{display:flex;align-items:center;gap:16px;margin-bottom:34px}
+.logo .hand{width:74px;height:74px;font-size:28px}.logo b{font-size:44px;line-height:.95;letter-spacing:-.04em;font-weight:800}
+.hero h1{font-family:var(--fd);font-size:clamp(32px,4.6vw,58px);font-weight:700;max-width:20ch;letter-spacing:-.02em}
+.hero p.sub{font-size:19px;color:#b9c8d8;max-width:60ch;margin:20px 0 30px}
+.kpis{position:relative;display:grid;grid-template-columns:repeat(5,1fr);background:var(--navy2);border-top:1px solid #23405a}
+.kpi{padding:24px 22px;border-right:1px solid #23405a}.kpi:last-child{border:0}
+.kpi .n{font-size:clamp(24px,2.6vw,34px);font-weight:800;color:var(--y);letter-spacing:-.02em;line-height:1.1}
+.kpi .l{font-size:12px;color:#9fb3c8;font-weight:600;margin-bottom:6px}.kpi .p{font-size:12px;color:#c6d3e0;margin-top:6px}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:22px;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;position:relative}
+.card.click{cursor:pointer}.card.click:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(11,22,34,.12)}
+.ic{width:40px;height:40px;border-radius:11px;background:var(--y);color:#111;display:grid;place-items:center;font-weight:800;margin-bottom:14px;font-size:17px}
+.card .big{font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--tx);margin:2px 0 6px}
+.card .more{display:inline-block;margin-top:8px;font-size:13px;font-weight:700;color:var(--blue)}
+.card p{font-size:14.5px;color:var(--mu)}
+.dk .card{background:var(--navy2);border-color:#23405a;color:#e8eef5}.dk .card p{color:#a9bacb}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-right:6px;background:#e8f0fe;color:#1a56b8}
+.tag.d{background:#e3f6ea;color:#16764a}.tag.r{background:#fff4d6;color:#8a6500}.tag.s{background:#fde8e8;color:#a32020}
+:root[data-theme=dark] .tag{filter:brightness(1.05)}
+sup.c{color:var(--blue);cursor:pointer;font-weight:700;font-size:11px;margin-left:1px}sup.c:hover{text-decoration:underline}
+.scroller{overflow-x:auto;padding-bottom:12px;scrollbar-width:thin}
+.tl{display:flex;gap:0;min-width:max-content;position:relative;padding-top:38px}
+.tl:before{content:"";position:absolute;left:0;right:0;top:26px;height:3px;background:var(--y)}
+.ty{width:150px;flex:none;padding-right:14px;cursor:pointer;position:relative;background:none;border:0;text-align:left;font:inherit;color:inherit}
+.ty:before{content:"";position:absolute;top:-19px;left:0;width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--y);transition:transform .2s}
+.ty:hover:before{transform:scale(1.35);background:var(--y)}
+.ty b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em}.ty span{font-size:13px;color:var(--mu);display:block;line-height:1.35}
+.dk .ty:before{background:var(--navy)}.dk .ty span{color:#a9bacb}
+.modal{position:fixed;inset:0;background:rgba(6,12,20,.66);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.on{display:flex;animation:fd .2s}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+.mb{background:var(--card);color:var(--tx);border-radius:18px;max-width:720px;width:100%;max-height:88vh;overflow:auto;padding:30px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.mb h3{font-family:var(--fd);font-size:26px;margin-bottom:14px;padding-right:30px}
+.mx{position:absolute;top:14px;right:16px;border:0;background:var(--bg);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;color:var(--tx)}
+.row{display:grid;grid-template-columns:120px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--bd);font-size:14.5px}
+.row b{font-size:12px;color:var(--mu);font-weight:700;padding-top:2px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}.tab.on.yy{background:var(--y);color:#111;border-color:var(--y)}
+.acc{border:1px solid var(--bd);border-radius:12px;background:var(--card);margin-bottom:10px;overflow:hidden}
+.acc button{width:100%;text-align:left;background:none;border:0;padding:15px 18px;font:inherit;font-weight:700;color:inherit;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.acc button:after{content:"+";font-size:20px;line-height:1;color:var(--mu)}.acc.on button:after{content:"−"}
+.acc .bd{display:none;padding:0 18px 16px}.acc.on .bd{display:block}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0}
+.flow div{background:var(--navy);color:#fff;border-radius:10px;padding:10px 14px;font-size:13.5px;font-weight:600;flex:1 1 130px;text-align:center}
+.flow i{align-self:center;color:var(--y);font-style:normal;font-weight:800}
+.dk .flow div{background:var(--navy2);border:1px solid #2a435b}
+.flow.l div:nth-child(odd){border-top:3px solid var(--y)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--bd)}th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--mu);font-weight:700}
+.tw{overflow-x:auto}
+.ph{border:2px dashed var(--bd);border-radius:var(--r);padding:22px;min-height:180px;display:flex;flex-direction:column;justify-content:flex-end;background:repeating-linear-gradient(135deg,transparent 0 12px,rgba(120,140,160,.07) 12px 24px);font-size:13px;color:var(--mu)}
+.dk .ph{border-color:#2f4a63}
+.chart{width:100%;height:auto;display:block}
+.chart text{font-family:var(--f);font-size:11px;fill:var(--mu)}.chart .gl{stroke:var(--bd)}
+.rng{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap}
+.rng button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:5px 11px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.rng button.on{background:var(--y);border-color:var(--y);color:#111}
+.tip{position:fixed;background:#111;color:#fff;font-size:12px;padding:5px 9px;border-radius:7px;pointer-events:none;z-index:200;display:none}
+.note{border-left:4px solid var(--y);background:var(--card);padding:12px 16px;border-radius:0 10px 10px 0;font-size:14px;color:var(--mu);margin:14px 0;box-shadow:var(--sh)}
+.quote{background:var(--y);color:#111;border-radius:var(--r);padding:24px;font-family:var(--fd);font-size:21px;line-height:1.35}
+.quote small{display:block;font-family:var(--f);font-size:12.5px;margin-top:10px;font-weight:600;opacity:.8}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.form label{font-size:12px;font-weight:700;color:var(--mu);display:block}
+.form input{width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:9px;font:inherit;background:var(--card);color:var(--tx);margin-top:4px}
+.sc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+.sc .card .big{font-size:22px}
+.country{padding:16px 10px;border-radius:12px;background:var(--card);border:1px solid var(--bd);cursor:pointer;text-align:center;font-weight:700;font-size:14px;transition:.2s}
+.country:hover,.country.on{background:var(--y);color:#111;border-color:var(--y)}
+.pane{background:var(--navy);color:#e8eef5;border-radius:var(--r);padding:22px;margin-top:16px}
+.res{max-height:70vh;overflow:auto}.res h4{font-size:12px;color:var(--mu);margin:16px 0 6px}
+.res a{display:block;padding:8px 10px;border-radius:8px;color:var(--tx);text-decoration:none;font-size:14px;cursor:pointer}.res a:hover{background:var(--bg)}
+.res a small{color:var(--mu);display:block}
+.foot{padding:40px 56px;font-size:13px;color:var(--mu)}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}.reveal.in2{opacity:1;transform:none}
+@media(max-width:1020px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.kpi{border-bottom:1px solid #23405a}}
+@media(max-width:820px){.side{transform:translateX(-100%)}.side.open{transform:none}.top{display:flex}main{margin:0;padding-top:54px}section{padding:48px 20px}.hero .in{padding:60px 20px 30px}.g2,.g3,.g4,.sc{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:2px}.hero{min-height:auto}.logo b{font-size:34px}.foot{padding:30px 20px}
+.tl{flex-direction:column;min-width:0;padding:0 0 0 26px}.tl:before{left:7px;right:auto;top:0;bottom:0;width:3px;height:auto}.ty{width:auto;padding:0 0 22px}.ty:before{top:5px;left:-26px}.scroller{overflow:visible}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}.reveal{opacity:1;transform:none}}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="top"><button class="burger" id="bg" aria-label="Menú">☰</button><span>Mercado Libre · Investigación</span></div>
+<aside class="side" id="side">
+  <div class="brand"><span class="hand">ML</span><span>mercado<br>libre</span></div>
+  <nav class="nav" id="nav"></nav>
+  <div class="sideb">
+    <input id="q" type="search" placeholder="Buscar: Galperin, IPO, 1999…" aria-label="Buscar">
+    <button class="btn s" id="th">Modo oscuro</button>
+  </div>
+</aside>
+<main id="main"></main>
+<div class="modal" id="modal"><div class="mb" id="mb"></div></div>
+<div class="tip" id="tip"></div>
+
+<script>
+/* ============ FUENTES ============ */
+const SRC={
+1:{t:"Resultados 4T y año 2025 (comunicado oficial)",o:"Mercado Libre / Business Wire",d:"24 feb 2026",k:"Oficial",u:"https://www.businesswire.com/news/home/20260224245400/en/MercadoLibre-Inc.-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results"},
+2:{t:"Form 10-K, año fiscal 2025",o:"SEC (EDGAR)",d:"feb 2026",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000109959026000006/meli-20251231.htm"},
+3:{t:"Form 10-K, año fiscal 2024",o:"SEC (EDGAR)",d:"feb 2025",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000109959025000007/meli-20241231.htm"},
+4:{t:"Form 10-K 2023 (segmentos: ingresos y resultado operativo 2021-2023)",o:"SEC (EDGAR)",d:"feb 2024",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000109959024000008/meli-20231231.htm"},
+5:{t:"Form 10-K 2022 (ingresos trimestrales y anuales 2020-2022)",o:"SEC (EDGAR)",d:"feb 2023",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000109959023000007/Financial_Report.xlsx"},
+6:{t:"Form 10-K 2020 (estado de resultados 2018-2020)",o:"SEC (EDGAR)",d:"feb 2021",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000156276221000079/meli-20201231x10k.htm"},
+7:{t:"Form 10-K 2018 (datos trimestrales 2016-2018)",o:"SEC (EDGAR)",d:"feb 2019",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000156276219000047/Financial_Report.xlsx"},
+8:{t:"Form 10-K 2015 (datos trimestrales 2013-2015)",o:"SEC (EDGAR)",d:"feb 2016",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/0001099590/000156276216000352/Financial_Report.xlsx"},
+9:{t:"Prospecto final de la oferta pública inicial (IPO)",o:"SEC (EDGAR)",d:"ago 2007",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000119312507178904/d424b1.htm"},
+10:{t:"Form 10-K 2007 (nota 17: IPO)",o:"SEC (EDGAR)",d:"feb 2008",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/0001099590/000119312508070409/d10k.htm"},
+11:{t:"Mercado Libre Founders: It Takes Patience and Resilience",o:"Stanford Graduate School of Business",d:"18 nov 2019",k:"Académica",u:"https://www.gsb.stanford.edu/insights/mercado-libre-founders-it-takes-patience-resilience"},
+12:{t:"Nicolás Szekasy: You Need to Be Prepared to Capture Opportunity",o:"Stanford Graduate School of Business",d:"1 may 2008",k:"Académica",u:"https://www.gsb.stanford.edu/insights/nicolas-szekasy-you-need-be-prepared-capture-opportunity"},
+13:{t:"Form 8-K: transición de CEO (Galperin → Szarfsztejn)",o:"SEC (EDGAR)",d:"21 may 2025",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000199937125006530/meli-8k_051625.htm"},
+14:{t:"Leadership transition at Mercado Libre",o:"Mercado Libre Newsroom",d:"21 may 2025",k:"Oficial",u:"https://news.mercadolibre.com/en/mercado-libre-leadership-transition-uruguay"},
+15:{t:"MercadoLibre CEO steps aside after 25 years for chairman job",o:"Bloomberg / Buenos Aires Times",d:"23 may 2025",k:"Prensa",u:"https://www.batimes.com.ar/news/economy/mercadolibre-ceo-steps-aside-after-25-years-for-chairman-job.phtml"},
+16:{t:"Mercado Libre Founder Marcos Galperin Steps Down After 26 Years",o:"Rio Times",d:"22 may 2025",k:"Prensa",u:"https://www.riotimesonline.com/mercado-libre-founder-marcos-galperin-steps-down-after-26-years-names-successor/"},
+17:{t:"Chasing the Latin American retail consumer",o:"CNBC",d:"27 may 2014",k:"Prensa",u:"https://www.cnbc.com/2014/05/27/chasing-the-latin-american-retail-consumer.html"},
+18:{t:"MercadoLibre Part 1: How They Survived (rondas 1999 y 2000)",o:"Steady Compounding",d:"11 dic 2025",k:"Secundaria — verificar en S-1",u:"https://steadycompounding.com/investing/mercadolibre-part-1-survival/"},
+19:{t:"Better Than eBay (primer día de cotización)",o:"The Motley Fool",d:"14 ago 2007",k:"Prensa",u:"https://www.fool.com/investing/high-growth/2007/08/14/better-than-ebay.aspx"},
+20:{t:"Mercado Libre (artículo enciclopédico)",o:"Wikipedia",d:"consultado sep 2026",k:"Secundaria — verificar",u:"https://en.wikipedia.org/wiki/Mercado_Libre"},
+21:{t:"MercadoLibre's Q4 Revenue Surges 45% on LatAm Boom",o:"Rio Times",d:"11 mar 2026",k:"Prensa",u:"https://www.riotimesonline.com/mercadolibres-q4-revenue-surges-45-on-latam-boom/"},
+22:{t:"MercadoLibre stock slides after raising $1.55B via equity offering",o:"Benzinga",d:"nov 2021",k:"Prensa",u:"https://benzinga.com/news/21/11/24128542/mercadolibre-stock-slides-after-raising-1-55b-via-equity-offering-at-5-discount"},
+23:{t:"Resultados 4T y año 2024 (comunicado oficial)",o:"Mercado Libre / GlobeNewswire",d:"20 feb 2025",k:"Oficial",u:"https://www.marketscreener.com/quote/stock/MERCADOLIBRE-INC-58469/news/Mercado-Libre-delivers-stellar-Q4-2024-with-net-revenue-of-6-1-billion-and-net-income-of-639-milli-49118915/"},
+24:{t:"MercadoLibre Is Building the Infrastructure Latin America's Economy Will Run On",o:"Yahoo Finance / Motley Fool",d:"sep 2026",k:"Prensa",u:"https://finance.yahoo.com/markets/stocks/articles/mercadolibre-building-infrastructure-latin-americas-100000050.html"},
+25:{t:"Mercado Libre turns 25: history and evolution",o:"Marketing4eCommerce",d:"20 ago 2024",k:"Prensa especializada",u:"https://marketing4ecommerce.net/en/what-is-mercado-libre-history-and-evolution-of-a-leader-in-latin-american-ecommerce/"},
+26:{t:"MercadoLibre (MELI) Q4 2025 Results: Paying for Growth on Purpose",o:"Level-Headed Investing",d:"4 mar 2026",k:"Análisis de terceros",u:"https://www.levelheadedinvesting.com/p/mercadolibre-meli-q4-2025-results"},
+27:{t:"MercadoLibre Full Year 2024 Earnings",o:"Yahoo Finance",d:"22 feb 2025",k:"Prensa",u:"https://finance.yahoo.com/news/mercadolibre-full-2024-earnings-eps-120435418.html"},
+28:{t:"MercadoLibre 2025 Financial Results: Q4 & Full-Year",o:"IndexBox (con datos de AP)",d:"25 feb 2026",k:"Prensa",u:"https://www.indexbox.io/blog/mercadolibre-q4-2025-earnings-net-income-of-559m-revenue-beats-forecasts/"},
+29:{t:"Mercado Libre (Deep Dive) — financiación 2018-2019",o:"GabGrowth",d:"22 abr 2026",k:"Secundaria — verificar",u:"https://gabgrowth.com/p/mercado-libre-deep-dive"},
+30:{t:"Mercado Libre CEO Marcos Galperin to Step Down in Late 2025",o:"Mexico Business News",d:"23 may 2025",k:"Prensa",u:"https://mexicobusiness.news/ecommerce/news/mercado-libre-ceo-marcos-galperin-step-down-late-2025"},
+31:{t:"FY2025 10-K: resumen de datos XBRL (México CNAE, Argentina, stablecoin)",o:"SignalX (datos del 10-K en EDGAR)",d:"25 feb 2026",k:"Secundaria — verificar en el 10-K",u:"https://signal-x.app/stock/mercado-libre/10-k/2025"},
+32:{t:"Q4 2025: 83M compradores, 78M usuarios fintech activos",o:"Mercado Libre (resumen en LinkedIn, G. Bekes)",d:"24 feb 2026",k:"Secundaria",u:"https://www.linkedin.com/posts/gbekes_meli-activity-7432197463349858304-dtQB"},
+33:{t:"Form 10-K 2020 / 8-K Q4 2021 (GMV y TPV 2021-2022)",o:"SEC (EDGAR)",d:"2022-2023",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000156276222000045/meli-20220222xex99_1.htm"},
+34:{t:"Estado de resultados 2022-2024 y EPS (10-K 2024, datos financieros)",o:"SEC (EDGAR)",d:"feb 2025",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000109959025000007/Financial_Report.xlsx"},
+35:{t:"Mercado Libre — perfil corporativo y ficha (empleados 2025, activos y patrimonio)",o:"Wikipedia",d:"consultado sep 2026",k:"Secundaria — verificar en el 10-K",u:"https://en.wikipedia.org/wiki/Mercado_Libre"},
+36:{t:"MercadoLibre Deep Dive (cotización y caídas históricas)",o:"InvestmentMarkets",d:"3 abr 2025",k:"Secundaria",u:"https://www.investmentmarkets.com.au/articles/investor-education/mercadolibre-meli-amazon-in-the-amazon-299"},
+37:{t:"Galperin steps aside as Mercado Libre CEO in ‘generational change’",o:"Buenos Aires Herald",d:"22 may 2025",k:"Prensa",u:"https://buenosairesherald.com/business/tech/galperin-steps-aside-as-mercado-libre-ceo-in-generational-change"},
+38:{t:"Q3 2025: 27º trimestre consecutivo de crecimiento superior al 30 %",o:"Mercado Libre / Business Wire",d:"29 oct 2025",k:"Oficial",u:"https://www.businesswire.com/news/home/20251029534041/en/"},
+39:{t:"Historia de Marcos Galperin (educación y trayectoria previa)",o:"Grokipedia / Wikipedia (enciclopedias colaborativas)",d:"2026",k:"Secundaria — verificar",u:"https://en.wikipedia.org/wiki/Marcos_Galperin"},
+41:{t:"Carta a accionistas 3T 2022 (GMV y TPV del trimestre)",o:"SEC (EDGAR), 8-K",d:"3 nov 2022",k:"SEC",u:"https://www.sec.gov/Archives/edgar/data/1099590/000156276222000426/meli-20221103xex99_1.htm"},
+42:{t:"Cronología «Evolución Mercado Libre» (hitos de la compañía transcritos)",o:"Timetoast",d:"s. f.",k:"Secundaria — verificar",u:"https://www.timetoast.com/timelines/evolucion-mercado-libre"},
+43:{t:"Brief History of MercadoLibre (Mercado Crédito 2017)",o:"PortersFiveForce",d:"1 ene 2026",k:"Secundaria — verificar",u:"https://portersfiveforce.com/blogs/brief-history/mercadolibre"},
+40:{t:"How Mercado Libre built a Fintech empire",o:"Popular Fintech",d:"27 nov 2025",k:"Análisis de terceros",u:"https://www.popularfintech.com/p/how-mercado-libre-built-a-fintech-empire-3f7ac04a0eca3947"}
+};
+const IMG_HELP='Fuentes de imágenes a revisar (licencia caso por caso): <a href="https://news.mercadolibre.com" target="_blank" rel="noopener">Newsroom</a> · <a href="https://investor.mercadolibre.com" target="_blank" rel="noopener">Investor Relations</a> · <a href="https://commons.wikimedia.org/w/index.php?search=Mercado+Libre" target="_blank" rel="noopener">Wikimedia Commons</a>';
+
+/* ============ DATOS ============ */
+const NAV=[["inicio","Inicio"],["historia","Historia"],["dia1","El día 1"],["fundador","El fundador"],["equipo","El equipo inicial"],["modelo","Modelo de negocio"],["clientes","Primeros clientes"],["financiacion","Financiación"],["productos","Productos"],["pago","Mercado Pago"],["envios","Mercado Envíos"],["credito","Mercado Crédito"],["ads","Mercado Ads"],["ecosistema","Ecosistema"],["expansion","Expansión"],["finanzas","Finanzas"],["balance","Balance"],["estrategias","Estrategias"],["movimientos","Movimientos clave"],["crisis","Crisis y errores"],["competencia","Competencia"],["porque","¿Por qué funcionó?"],["replicar","Cómo replicar"],["simulador","Simulador"],["curiosos","Datos curiosos"],["fuentes","Fuentes"]];
+
+const TL=[
+{y:1999,t:"Nace Mercado Libre",ctx:"Galperin, Kazah y Tolda acababan de terminar el MBA en Stanford. Galperin pasaba horas en la biblioteca planeando el negocio y luego sumó a sus compañeros.{11}",dec:"Crear un marketplace/subasta en línea para América Latina, con los tres socios pactando de antemano el reparto de acciones.{11}",inv:"Ronda semilla de US$7,6 M con Hicks Muse, JPMorgan Partners, Flatiron y Goldman Sachs (cierre en oct. 1999), según una fuente secundaria que debe cotejarse con el S-1.{18}",prod:"Sitio de subastas y compraventa entre particulares, inspirado en el modelo eBay.",res:"Fue elegida empresa Endeavor en 1999.{20}",les:"Análisis: empezar con un modelo probado en otro mercado y adaptarlo reduce el riesgo de invención.",fecha:"2 de agosto de 1999 según fuentes secundarias; las fuentes primarias consultadas indican solo el año."},
+{y:2000,t:"La gran ronda y el estallido de la burbuja",ctx:"Fin de la burbuja puntocom.",inv:"US$46,5 M levantados en mayo de 2000; según la misma fuente secundaria, alcanzaron para financiar unos siete años de operación y aún quedaba una cuarta parte al salir a bolsa.{18}",les:"Análisis: el capital abundante al inicio y la disciplina de gasto posterior son dos decisiones distintas."},
+{y:2001,t:"eBay entra al capital",ctx:"Crisis argentina 2001-2002 y mercado de capital cerrado para startups.",dec:"Aceptar a eBay como accionista y socio exclusivo en la región.{17}",inv:"eBay adquirió el 19,5 % en septiembre de 2001.{20}",prod:"Sus operaciones brasileñas (iBazar) se integraron al negocio, según fuentes secundarias.{29}",res:"eBay vendió su participación en 2016.{20}",les:"Análisis: un socio estratégico puede aportar validación y tecnología, no solo dinero."},
+{y:2003,t:"Nace Mercado Pago",ctx:"Miedo a las estafas y baja bancarización frenaban las compras en línea.",dec:"Crear una herramienta de pago que verificara la entrega antes de liberar el dinero al vendedor.{25}",prod:"Al comienzo, los pagos se recibían por fax y se gestionaban a mano.{25}",imp:"Semilla de lo que hoy es la unidad fintech.{24}",les:"Análisis: cada fricción de confianza puede convertirse en un producto."},
+{y:2006,t:"Salto a Centroamérica y Caribe",prod:"Operaciones nuevas en Costa Rica, Panamá y República Dominicana.{20}"},
+{y:2007,t:"IPO en Nasdaq",ctx:"Primera empresa tecnológica latinoamericana en cotizar en Nasdaq.{20}",inv:"Precio de US$18 por acción; 16,08 M de acciones (2,6 M de la compañía y 13,5 M de accionistas vendedores), más opción de sobreadjudicación ejercida.{9,10}",res:"Ingresos 2007: US$85,1 M y utilidad de US$9,6 M.{12} Abrió a US$22 y cerró su primer día a US$28,50.{19}",les:"Análisis: el IPO fue sobre todo liquidez para inversores tempranos; la empresa recibió US$49,6 M netos.{10}"},
+{y:2008,t:"Compra de DeRemate y CMG",dec:"Adquirir a un competidor regional (DeRemate) y a Classified Media Group, dueño de tucarro.com y tuinmueble.com.{20}",res:"Consolidó su liderazgo en varios países; DeRemate operaba en siete mercados.{42}"},
+{y:2011,t:"Plataforma abierta y API",dec:"Migrar a tecnología de código abierto y abrir APIs a desarrolladores.{20}",les:"Análisis: abrir la plataforma multiplica quién puede construir sobre ella."},
+{y:2012,t:"Mercado Shops",prod:"Tiendas online propias para vendedores, integradas a la plataforma.{24}"},
+{y:2013,t:"Mercado Envíos y fondo MeLi",prod:"Sistema de logística que estandarizó tarifas y plazos de entrega.{24} Además se lanzó el MeLi Commerce Fund para invertir en startups que usan sus APIs.{20}"},
+{y:2014,t:"Portal Inmobiliario",prod:"Adquisición del portal de clasificados inmobiliarios de Chile.{20}"},
+{y:2016,t:"Pagos fuera de la plataforma",prod:"Mercado Pago llega a comercios físicos mediante POS y QR (2016-2017).{24} eBay vende su participación.{20}"},
+{y:2017,t:"Crédito e iBazar Brasil",prod:"Mercado Crédito comienza a prestar con datos transaccionales (fuente secundaria).{43} En abril adquirió la filial brasileña de iBazar.{20}"},
+{y:2018,t:"Bonos convertibles y pérdidas",inv:"US$880 M en notas convertibles 2028 (agosto).{34,4}",res:"Pérdida neta de US$36,6 M y pérdida operativa de US$69,5 M.{6}",les:"Análisis: se sacrificó rentabilidad de corto plazo para construir infraestructura."},
+{y:2019,t:"Nueva ronda de capital",inv:"Emisión de acciones y acciones preferentes en marzo de 2019.{5} Una fuente secundaria cifra US$1.850 M para 2018-2019, con US$750 M de PayPal.{29}",res:"Ingresos US$2.296 M; pérdida neta de US$172 M.{6}"},
+{y:2020,t:"Salto pandémico",res:"Ingresos US$3.973 M (+73 %) y resultado neto casi nulo (−US$0,7 M).{6}",imp:"No se afirma causalidad: el crecimiento coincide con el auge del comercio en línea durante la pandemia."},
+{y:2021,t:"Ingresos por encima de US$7.000 M",inv:"Oferta de 1 M de acciones a US$1.550 en noviembre: unos US$1.550 M brutos.{22}",res:"Ingresos US$7.069 M; utilidad neta ≈US$83 M (derivada del EPS de US$1,67).{4}"},
+{y:2022,t:"Más de mil millones de envíos",res:"Ingresos US$10.537 M; utilidad neta US$482 M; superó 1.000 M de envíos en el año.{5,34,25}"},
+{y:2023,t:"Utilidad de casi US$1.000 M",res:"Ingresos US$14.473 M (reportado entonces); utilidad neta US$987 M.{4,34}"},
+{y:2024,t:"25 años y 100 M de compradores",res:"Superó 100 M de compradores únicos anuales y 61 M de usuarios fintech activos; ingresos ≈US$20.800 M y utilidad neta US$1.911 M.{23,27,34}"},
+{y:2025,t:"Envío gratis, crédito y relevo del CEO",dec:"Bajar el umbral de envío gratis en Brasil de R$79 a R$19 para acelerar compradores.{21}",res:"Ingresos US$28.900 M (+39 %); ingresos operativos ≈US$3.200 M; utilidad neta ≈US$2.000 M.{1,26,28} En mayo se anunció el relevo de Galperin como CEO.{13,14}"},
+{y:2026,t:"Szarfsztejn, CEO",ctx:"Desde el 1 de enero de 2026, Ariel Szarfsztejn es CEO y Galperin presidente ejecutivo.{13,14}",res:"El 24 de febrero se publicaron los resultados de 2025.{1}",les:"No se incorporaron resultados de 2026 en esta versión."}
+];
+
+const PPL=[
+{n:"Marcos Galperin",r:"Fundador · presidente ejecutivo desde el 1 ene. 2026 (CEO 1999-2025)",b:["Cursó el MBA en Stanford (promoción 1999).{11,12}","Fue CEO durante 26 años y pasó a presidente ejecutivo el 1 de enero de 2026; se ocupa de estrategia, producto, cultura, asignación de capital e IA.{14,37}","Estudios previos y trayectoria en YPF y JP Morgan: indicados por fuentes secundarias; verificar antes de citar.{39}"]},
+{n:"Hernán Kazah",r:"Cofundador (según Stanford GSB)",b:["Compañero de MBA (promoción 1999); Galperin lo sumó al proyecto.{11}","Hoy dirige el fondo de capital de riesgo Kaszek Ventures (dato de 2019).{11}","En 2008 figuraba en el equipo directivo regional.{12}"]},
+{n:"Stelleo Tolda",r:"Cofundador · COO (dato de 2019)",b:["MBA Stanford 1999; en 2019 seguía como COO.{11}","En 2008 integraba el equipo directivo regional.{12}"]},
+{n:"Nicolás Szekasy",r:"Ejecutivo citado por Stanford GSB en 2008; otras fuentes lo describen como CFO",b:["Aparece como voz de la compañía en la nota de Stanford de 2008.{12}","Algunas fuentes secundarias lo incluyen entre los fundadores; Stanford GSB no.{12}"]}
+];
+
+const STRAT=[
+["Marketplace","Confianza entre desconocidos","Reputación de vendedores, protección al comprador y luego pagos y envíos integrados.","Hoy: sin cargo de comisión adicional por procesar pagos en el marketplace, ya incluidos en la comisión final.{2}","Antes de vender, resuelve qué impide que un extraño confíe en otro."],
+["Liquidez y efectos de red","Compradores y vendedores se atraen","Más compradores atraen más vendedores y viceversa; en 2025 los compradores únicos trimestrales superaron 80 M.{1}","Inversión en surtido, envío gratis y experiencia para ganar volumen.{1}","Elige un lado del mercado y hazlo tan atractivo que arrastre al otro."],
+["Pagos","Baja bancarización y miedo al fraude","Mercado Pago nace en 2003 para liberar el dinero solo tras la entrega.{25}","TPV trimestral: US$58,9 mil M en el 4T 2024 (+33 %).{23}","Si el pago es la fricción, el pago es el producto."],
+["Logística","Entregas lentas e impredecibles","Mercado Envíos (2013) y red propia; casi 75 % de las entregas rápidas en menos de 48 h en el 4T 2025.{24,1}","Baja del umbral de envío gratis en Brasil de R$79 a R$19.{21}","La logística es una ventaja acumulativa: cuanto más volumen, menor costo unitario."],
+["Fintech","Uso de datos del marketplace para prestar","Crédito ofrecido en el checkout a usuarios preaprobados; casi 3 M de tarjetas emitidas en el 4T 2025.{26}","Cartera de crédito de US$6.600 M en el 4T 2024 (+74 %).{23}","Tus propios datos pueden ser tu ventaja de originación."],
+["Expansión","Mercados fragmentados","Expansión inicial a Brasil, México, Uruguay y Venezuela; compras de competidores locales (DeRemate, 2008).{24,20}","Brasil, México y Argentina suman 95,6 % de los ingresos de 2025.{31}","Priorizar los mercados de mayor escala antes que la cobertura simbólica."],
+["Precios y monetización","Ingresos más allá de la comisión","Servicios, publicidad, crédito y pagos aportan ingresos adicionales.{2}","Ingresos de publicidad +67 % neutral a tipo de cambio en el 4T 2025.{1}","Diversifica ingresos sobre la misma audiencia."],
+["Tecnología y datos","Escalar con un equipo pequeño","2011: plataforma abierta y APIs.{20} Modelos de crédito alimentados por datos de la plataforma.{26}","Ecosistema de desarrolladores y modelos propios de riesgo.","Abrir APIs puede crear un ecosistema alrededor de tu producto."],
+["Adquisiciones","Consolidar competencia","DeRemate (2008), CMG (2008), Portal Inmobiliario (2014), iBazar Brasil (2017).{20}","Menos competidores directos en mercados clave.","Comprar rivales solo si ganas datos, usuarios o tecnología que no puedes construir a tiempo."]
+];
+
+const MOV=[
+["Salir a bolsa (2007)","El IPO le dio acceso a capital público, liquidez a accionistas tempranos y visibilidad internacional.{9,10}"],
+["Lanzar Mercado Pago (2003)","Del pago verificado en el marketplace a una plataforma fintech regional.{25,40}"],
+["Construir logística (2013 en adelante)","De estandarizar envíos a fulfillment y entregas en 48 h.{24,1}"],
+["Adquirir competidores (2008)","DeRemate y CMG consolidaron posición y sumaron clasificados.{20}"],
+["Abrir la plataforma (2011)","API y código abierto para que terceros construyan servicios.{20}"],
+["Fintech fuera de la plataforma (2016-2019)","POS y QR en comercios físicos; luego cuenta digital, ahorro e inversión.{24,40}"],
+["Recaudar capital (2018-2021)","Bonos convertibles, preferentes y ofertas de acciones para financiar infraestructura.{5,22,34}"],
+["Envío gratis agresivo en Brasil (2025)","Sacrificó margen para crecer compradores y participación.{21,26}"]
+];
+
+/* ============ HELPERS ============ */
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const cite=h=>h.replace(/\{([\d,]+)\}/g,(m,a)=>a.split(",").map(n=>`<sup class="c" data-s="${n}" title="${(SRC[n]||{}).t||''}">[${n}]</sup>`).join(""));
+const fmtM=v=>Math.abs(v)>=1000?(v/1000).toFixed(1).replace(".",",")+" mil M":Math.round(v).toLocaleString("es")+" M";
+const ICONS=["◆","▲","●","■","✦","◐","◉","▣"];
+function card(i,title,big,txt,more,cat){return `<div class="card ${more?'click':''}" ${more?`data-more="${encodeURIComponent(more)}" data-title="${title}"`:''} data-cat="${cat||''}"><div class="ic">${ICONS[i%ICONS.length]}</div><h3>${title}</h3>${big?`<div class="big">${big}</div>`:''}<p>${txt}</p>${more?'<span class="more">VER MÁS →</span>':''}</div>`}
+function rows(o){return Object.entries(o).filter(([k,v])=>v).map(([k,v])=>`<div class="row"><b>${k}</b><div>${v}</div></div>`).join("")}
+function sec(id,kick,title,lead,body,dk){return `<section id="${id}" class="${dk?'dk':''}"><div class="in reveal"><span class="kick">${kick}</span><h2>${title}</h2>${lead?`<p class="lead">${lead}</p>`:''}${body}</div></section>`}
+function flow(a,c){return `<div class="flow ${c||''}">${a.map((x,i)=>(i?'<i>→</i>':'')+`<div>${x}</div>`).join("")}</div>`}
+function img(cap){return `<div class="ph"><b>Imagen pendiente</b>${cap}<br><small>${IMG_HELP}</small></div>`}
+
+/* ============ SECCIONES ============ */
+const H=[];
+H.push(`<section id="inicio" class="hero"><div class="in"><div class="logo"><span class="hand">ML</span><b>mercado<br>libre</b></div><h1>De una startup argentina de 1999 a uno de los mayores ecosistemas digitales de América Latina.</h1><p class="sub">Una investigación interactiva sobre su historia, fundador, modelo de negocio, estrategias, finanzas, productos y decisiones que transformaron la compañía.</p><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn y" href="#dia1">COMENZAR EL RECORRIDO →</a><a class="btn g" href="#historia">EXPLORAR LA HISTORIA</a></div><p style="margin-top:26px;font-size:13px;color:#8fa4ba">Actualizado a: 20 de septiembre de 2026 · Datos anuales hasta el ejercicio 2025 (publicado el 24 feb. 2026). No incluye resultados de 2026.</p></div>
+<div class="kpis">
+<div class="kpi"><div class="l">AÑO DE FUNDACIÓN</div><div class="n" data-c="1999" data-f="n">1999</div><div class="p">Buenos Aires, Argentina{11}</div></div>
+<div class="kpi"><div class="l">ESTRUCTURA CORPORATIVA</div><div class="n" style="font-size:22px">Delaware · Montevideo</div><div class="p">2025 · constituida en Delaware; comunicados desde Montevideo. Propuesta de mudar el domicilio a Texas (mayo 2025), resultado no verificado.{15}</div></div>
+<div class="kpi"><div class="l">INGRESOS NETOS</div><div class="n">US$<span data-c="28.9" data-d="1">28,9</span> mil M</div><div class="p">Año 2025 · +39 % interanual{1,28}</div></div>
+<div class="kpi"><div class="l">USUARIOS</div><div class="n"><span data-c="83">83</span> M</div><div class="p">Compradores únicos, 4T 2025 · 78 M usuarios fintech activos{1,32}</div></div>
+<div class="kpi"><div class="l">EMPLEADOS · PAÍSES</div><div class="n">123.670 · 18</div><div class="p">Empleados 2025 (fuente secundaria){35} · 18 países 2025{37}</div></div>
+</div></section>`);
+
+H.push(sec("intro","¿Qué vas a encontrar?","Un caso de negocio en formato documental","Cuatro entradas para recorrer la historia de Mercado Libre.",`<div class="grid g4">${[["Historia completa","1999 → 2026","Línea de tiempo interactiva año por año.","#historia"],["Finanzas","2013 → 2025","Ingresos, utilidad, balance y KPI.","#finanzas"],["Estrategias","9 palancas","Problema, decisión, resultado y aplicación.","#estrategias"],["Cómo replicar","Principios","Lo que un emprendedor puede aprender.","#replicar"]].map((c,i)=>`<a href="${c[3]}" style="text-decoration:none;color:inherit"><div class="card click"><div class="ic">${ICONS[i]}</div><h3>${c[0]}</h3><div class="big">${c[1]}</div><p>${c[2]}</p><span class="more">VER MÁS →</span></div></a>`).join("")}</div>
+<div class="note"><b>Cómo leer esta web.</b> Cada dato lleva una referencia <sup class="c" data-s="1">[1]</sup> que abre su fuente. Las etiquetas distinguen <span class="tag d">HECHO</span> <span class="tag r">RECONSTRUCCIÓN / ANÁLISIS</span> <span class="tag s">FUENTE SECUNDARIA</span>. Donde no hay dato verificado, se dice y no se rellena.</div>
+<div class="grid g3" style="margin-top:18px"><div class="card"><h3>Mercado Libre en 60 segundos</h3><p>Es la plataforma de comercio electrónico y fintech líder en América Latina. Gana dinero con comisiones de venta, publicidad, envíos, pagos y crédito. Nació en 1999 en Buenos Aires como sitio de subastas, salió a Nasdaq en 2007 y hoy factura US$28,9 mil M al año.{1,28}</p></div><div class="card"><h3>Qué la diferencia</h3><p>Combina marketplace, pagos y logística propia: cada pieza refuerza a las demás. Compradores que pagan y reciben rápido compran más; vendedores con esa base venden más.{1}</p></div><div class="card"><h3>En 10 minutos</h3><p>Idea (1999) → fundación → primeros socios → capital (1999-2001) → Mercado Pago (2003) → IPO (2007) → Envíos (2013) → fintech y crédito (2016-2019) → escala (2020-2025) → nuevo CEO (2026).</p></div></div>`));
+
+H.push(sec("historia","Historia","1999 – 2026","Selecciona un año para abrir la ficha ampliada.",`<div class="scroller"><div class="tl" id="tl">${TL.map((e,i)=>`<button class="ty" data-i="${i}"><b>${e.y}</b><span>${e.t}</span></button>`).join("")}</div></div><p style="font-size:13px;color:var(--mu);margin-top:8px">Desliza horizontalmente. Los años sin ficha (2004-2005, 2009-2010, 2015) no se incluyeron porque no se documentaron hitos verificables en esta pasada.</p>`));
+
+H.push(sec("dia1","Todo comenzó en 1999","«Si pudiéramos volver al día 1…»","Separamos lo documentado de la reconstrucción de contexto.",`<div class="grid g2"><div class="card"><span class="tag d">DATOS DOCUMENTADOS</span><h3 style="margin-top:10px">Lo que dicen las fuentes</h3>
+<div class="row"><b>Origen</b><div>Los tres cofundadores acababan de terminar el MBA en Stanford.{11}</div></div>
+<div class="row"><b>La idea</b><div>Galperin, en la reunión de 2019: «I spent a lot of time in the library, planning the business».{11}</div></div>
+<div class="row"><b>Socios</b><div>Convenció a Kazah; pactaron el reparto de acciones antes de empezar.{11}</div></div>
+<div class="row"><b>Capital</b><div>Primeros inversores con ayuda del profesor Jack McDonald; John Muse (Hicks Muse) fue el primero.{17} Semilla de US$7,6 M en 1999 y US$46,5 M en mayo de 2000 (fuente secundaria).{18}</div></div>
+<div class="row"><b>Pagos</b><div>En 2003, los pagos llegaban por fax y se procesaban manualmente.{25}</div></div>
+<div class="row"><b>Reconocimiento</b><div>Empresa Endeavor en 1999.{20}</div></div></div>
+<div class="card"><span class="tag r">RECONSTRUCCIÓN / CONTEXTO</span><h3 style="margin-top:10px">Lo que sabemos del entorno</h3>
+<div class="row"><b>Internet</b><div>En mayo de 2007, la penetración promedio de Internet en la región era 18,4 % (Chile 42,4 %, Brasil 17,2 %); entre 2000 y 2007 los usuarios crecieron 466 %.{9} Para 1999 no hay una cifra confiable en las fuentes consultadas.</div></div>
+<div class="row"><b>Escala</b><div>Región de 550 M de personas y PIB de US$2,9 billones (2006).{9}</div></div>
+<div class="row"><b>Barreras</b><div>Baja bancarización, desconfianza, logística débil: motivaron Mercado Pago (2003) y Envíos (2013).{25,24}</div></div>
+<div class="row"><b>Inspiración</b><div>Modelo eBay adaptado a la región; eBay entró al capital en 2001.{17}</div></div>
+<div class="row"><b>Relato</b><div>Existe una anécdota de una presentación de Galperin a John Muse en un traslado al aeropuerto; proviene de una fuente secundaria.{18}</div></div>
+<div class="row"><b>Sin dato</b><div>Primeros usuarios, primeras ventas y primeros vendedores: no hay cifras verificables en las fuentes consultadas.</div></div></div></div>
+${flow(["Problema: poca confianza","Observación: eBay funciona","Idea: subastas regionales","Modelo: comisión","Recursos: VC 1999","Equipo: 3 socios","Mercado Libre"],"l")}
+${img("Foto histórica de las primeras oficinas o del sitio original (pendiente de licencia).")}`));
+
+H.push(`<section id="fundador" class="dk"><div class="in reveal"><span class="kick">El fundador</span><div class="grid g2" style="align-items:center;margin:8px 0 30px"><div><h2>Marcos Galperin</h2><p class="lead" style="margin-bottom:14px">El hombre detrás de la idea. Fundador de Mercado Libre; presidente ejecutivo desde el 1 de enero de 2026.{13,14}</p><div class="grid g2" style="gap:10px"><div class="card"><small>NOMBRE</small><b>Marcos Eduardo Galperin</b></div><div class="card"><small>ROL ACTUAL (2026)</small><b>Presidente ejecutivo</b></div><div class="card"><small>FUNDADOR</small><b>Mercado Libre, 1999</b></div><div class="card"><small>FORMACIÓN</small><b>Stanford MBA{11} · Wharton{39}</b></div></div></div>${img("Retrato profesional actual de Marcos Galperin (a licenciar; no se incluyeron fotos por no verificar derechos).")}</div>
+<div class="tabs" id="ftabs">${["Educación","Carrera","Mercado Libre","Decisiones","Filosofía","Aprender"].map((t,i)=>`<button class="tab ${i?'':'on yy'}" data-t="${i}">${t}</button>`).join("")}</div><div id="fbody"></div></div></section>`);
+
+H.push(sec("equipo","El equipo inicial","Quiénes participaron","Las fuentes no usan «fundador» de la misma manera.",`<div class="grid g2">${PPL.map((p,i)=>`<div class="card click" data-p="${i}" data-cat="Personas"><div class="ic">${ICONS[i]}</div><h3>${p.n}</h3><p>${p.r}</p><span class="more">VER MÁS →</span></div>`).join("")}</div>
+<div class="note"><b>Diferencias entre fuentes.</b> Stanford GSB (2019) habla de tres cofundadores: Galperin, Kazah y Tolda.{11} Stanford (2008) dice que fue fundada por Galperin y Kazah.{12} Otras páginas secundarias añaden a Szekasy, Massú, Estevarena o Passaro con criterios distintos; no se pudo cotejar con fuente primaria, por lo que no se toman como hecho.</div>`));
+
+H.push(sec("modelo","Modelo de negocio","Un mapa donde cada pieza refuerza a las demás","Vendedores → Marketplace → Compradores → Pagos → Logística → Publicidad → Crédito → Servicios financieros → Ecosistema.",`${flow(["Vendedores","Marketplace","Compradores","Pagos","Logística","Publicidad","Crédito","Servicios financieros"])}
+<div class="grid g3">${[["Vendedores y catálogo","Más oferta atrae compradores; los vendedores usan Mercado Pago y Envíos."],["Pagos","Facilitan la compra y generan datos de comportamiento.{2}"],["Logística","Entrega rápida sube la conversión y la fidelidad.{24}"],["Publicidad","Los vendedores pagan por visibilidad dentro de la misma audiencia.{1}"],["Crédito","Los datos del marketplace alimentan los modelos de riesgo.{26}"],["Ecosistema","El comprador que usa varias piezas genera más GMV y TPV.{23}"]].map((c,i)=>card(i,c[0],"",c[1])).join("")}</div>
+<h3 style="margin-top:32px">¿Cómo ganaba dinero?</h3>${flow(["Vendedor publica","Vende","Comisión","Ingreso"])}<p>Además: comisiones por retiro de efectivo, seguros, ingresos por crédito, servicios financieros, publicidad y ventas de productos propios.{2} En 2025, Comercio aportó ≈US$16,3 mil M y Fintech ≈US$12,6 mil M.{31}</p><div class="note">Antes del 2003 la única fuente de ingresos documentada en esta investigación es la comisión de la plataforma; el detalle por año no se encontró en las fuentes consultadas.</div>`));
+
+H.push(sec("clientes","Primeros clientes","Cómo se ganó la confianza","No hay cifras verificables de los primeros usuarios; sí hay evidencia del problema central: la confianza.",`<div class="grid g3">${[["Confianza","Los primeros pagos llegaban por fax y requerían control manual; el objetivo era liberar el dinero solo tras recibir el producto.{25}"],["Alcance regional","Desde el inicio se buscó operar en varios países; en 2006 llegaron a Centroamérica.{20,24}"],["Aliado global","La entrada de eBay (2001) aportó validación y tecnología.{17}"]].map((c,i)=>card(i,c[0],"",c[1])).join("")}</div>`));
+
+H.push(sec("financiacion","Financiación","Del capital de riesgo al mercado de capitales","Cronología por evento. Donde falta el dato (valoración, uso del capital), se indica.",`<div class="tw"><table><thead><tr><th>Fecha</th><th>Evento</th><th>Monto</th><th>Inversores</th><th>Etapa</th></tr></thead><tbody>
+<tr><td>1999</td><td style="text-align:left">Ronda semilla{18}</td><td>US$7,6 M</td><td style="text-align:left">Hicks Muse, JPMorgan Partners, Flatiron, Goldman Sachs</td><td>Startup</td></tr>
+<tr><td>May 2000</td><td style="text-align:left">Gran ronda{18}</td><td>US$46,5 M</td><td style="text-align:left">No detallados en esta pasada</td><td>Crecimiento</td></tr>
+<tr><td>Sep 2001</td><td style="text-align:left">Participación de eBay{20}</td><td>19,5 % del capital</td><td style="text-align:left">eBay</td><td>Consolidación</td></tr>
+<tr><td>Ago 2007</td><td style="text-align:left">IPO Nasdaq{9,10}</td><td>US$18 por acción; US$49,6 M netos a la empresa</td><td style="text-align:left">JP Morgan y Merrill Lynch (suscriptores)</td><td>Pública</td></tr>
+<tr><td>Ago 2018</td><td style="text-align:left">Notas convertibles 2028{34}</td><td>US$880 M, 2 %</td><td style="text-align:left">No detallados</td><td>Escala</td></tr>
+<tr><td>Mar 2019</td><td style="text-align:left">Acciones y preferentes{5}</td><td>≈US$1.850 M (2018-2019){29}</td><td style="text-align:left">Incluye PayPal (US$750 M){29}</td><td>Escala</td></tr>
+<tr><td>Nov 2021</td><td style="text-align:left">Oferta de acciones{22}</td><td>≈US$1.550 M brutos</td><td style="text-align:left">Mercado público</td><td>Escala</td></tr></tbody></table></div>
+<div class="note">Valoraciones de las rondas privadas y uso del capital no están documentados en las fuentes consultadas. La capitalización bursátil rondaba US$131.000 M en mayo de 2025.{16}</div>
+<h3 style="margin:34px 0 14px">Cuando Mercado Libre salió a bolsa</h3><div class="grid g4">${[["Fecha","Agosto 2007","Primer día de cotización: 10 de agosto{9}"],["Bolsa","Nasdaq: MELI","Primera tecnológica latinoamericana en Nasdaq{20}"],["Precio","US$18,00","Abrió a US$22 y cerró a US$28,50{19}"],["Acciones","16,08 M","2,6 M de la compañía; 13,5 M de accionistas{10}"]].map((c,i)=>card(i,c[0],c[1],c[2])).join("")}</div>
+<p style="margin-top:14px">La compañía recibió US$49,6 M netos y con ellos canceló un préstamo de US$9,5 M con eBay.{10} Después del IPO, la acción pasó por caídas de 90 % (2008) y 69 % (2022), según una fuente secundaria.{36}</p>`));
+
+H.push(sec("productos","Productos","Todo el ecosistema","Cuándo apareció cada pieza.",`<div class="grid g4" id="prods"></div>`));
+const PR=[["Marketplace","1999","Subastas y compraventa entre usuarios.{11}"],["Mercado Pago","2003","Pagos con verificación de entrega.{25}"],["Mercado Shops","2012","Tiendas online para vendedores.{24}"],["Mercado Envíos","2013","Logística estandarizada.{24}"],["Pagos físicos: POS y QR","2016-2017","Cobros fuera de la plataforma.{24}"],["Mercado Crédito","2017","Préstamos con datos propios (fuente secundaria).{43}"],["Cuenta digital, ahorro, inversión","2018-2019","Del wallet a un banco digital de facto.{40}"],["Mercado Ads","Sin fecha verificada","Ingresos +67 % en el 4T 2025.{1}"],["Mercado Play","Sin fecha verificada","No se documentó en las fuentes consultadas."],["Stablecoin «Meli Dólar»","2025","Licencia de activos digitales en Bermudas (ago. 2025).{31}"]];
+
+H.push(sec("pago","Mercado Pago","De un componente de e-commerce a una plataforma fintech","Nació en 2003 para reducir el miedo al fraude.",`<div class="grid g2"><div class="card"><h3>Qué problema resolvía</h3><p>Compradores y vendedores no confiaban: el pago se retenía hasta confirmar la entrega. Al principio se hacía por fax y a mano.{25}</p></div><div class="card"><h3>Cómo evolucionó</h3><p>Mercado Pago se abrió a comercios fuera de la plataforma (POS y QR, 2016-2017) y luego sumó cuenta digital, transferencias, tarjetas, ahorro, inversiones y seguros.{24,40}</p></div></div>
+<div class="grid g4" style="margin-top:18px">${[["78 M","usuarios activos mensuales fintech (4T 2025){32}"],["+42 %","crecimiento del TPV en el 4T 2025{32}"],["US$58,9 mil M","TPV del 4T 2024{23}"],["≈3 M","tarjetas de crédito emitidas en el 4T 2025{26}"]].map((c,i)=>card(i,"",c[0],c[1])).join("")}</div>${flow(["2003 pagos en el marketplace","2014-15 adquirencia y POS","2016-17 QR","2018-19 cuenta digital","2025 stablecoin en Bermudas"])}`));
+
+H.push(sec("envios","Mercado Envíos","Por qué la logística era decisiva","Entrega lenta = venta perdida.",`<div class="grid g3">${[["Antes","Envíos heterogéneos; cada vendedor coordinaba el suyo. En 2013, Mercado Envíos estandarizó tarifas y plazos.{24}"],["Escala","Más de 1.000 M de envíos en 2022.{25} En el 4T 2022, 43 % del volumen en fulfillment y 76 % de las entregas en 48 h.{5}"],["Hoy","Casi 75 % de las entregas rápidas en menos de 48 h (4T 2025); 752 M de artículos vendidos en el trimestre (+43 %).{1}"]].map((c,i)=>card(i,c[0],"",c[1])).join("")}</div>${flow(["Vendedor publica","Fulfillment / centro","Última milla","Comprador recibe","Reseña y recompra"])}<div class="note">En 2025 el umbral de envío gratis en Brasil bajó de R$79 a R$19: aceleró compradores pero presionó el margen operativo.{21,26}</div>`));
+
+H.push(sec("credito","Mercado Crédito","Prestar con los datos del ecosistema","Comenzó a prestar en 2017 según fuentes secundarias.{43}",`<div class="grid g3">${[["US$6.600 M","cartera de crédito en el 4T 2024, +74 %{23}"],["10,7 %","provisión para incobrables sobre ingresos 2025 (8,9 % en 2024){31}"],["Riesgo","Crecer crédito exige constituir provisiones por adelantado: presiona el margen aunque la calidad sea buena.{26}"]].map((c,i)=>card(i,"",c[0],c[1])).join("")}</div>`));
+
+H.push(sec("ads","Mercado Ads","Monetizar la audiencia","No se verificó su fecha de lanzamiento; sí su peso creciente.",`<div class="grid g2">${card(0,"Crecimiento","+67 %","Ingresos de publicidad en el 4T 2025, neutral a tipo de cambio.{1}")}${card(1,"Lógica","Media dentro del checkout","Los vendedores pagan por visibilidad ante una audiencia que ya compra; análisis basado en el modelo de negocio descrito por la compañía.{2}")}</div>`));
+
+H.push(sec("ecosistema","Ecosistema","Todo conectado","Mercado Libre reúne comercio, fintech y logística.",`<div class="scroller"><div class="grid g4" style="min-width:560px">${PR.map((p,i)=>card(i,p[0],p[1],p[2])).join("")}</div></div>`));
+
+const PAIS={Argentina:"Origen (1999). En 2025 su fintech creció 62,9 % y su comercio 44,6 % en ingresos; la inflación fue 31,5 % (117,8 % en 2024).{2,31}",Brasil:"Entre los primeros mercados de expansión;{24} mayor mercado: ≈55 % de los ingresos del 4T 2025. Free shipping desde R$19 en 2025.{21}",México:"Entre los primeros mercados de expansión;{24} ≈22 % de los ingresos del 4T 2025. Autoridad de competencia cerró en 2025 una investigación sin multas.{21,31}",Uruguay:"Entre los primeros mercados de expansión;{24} los comunicados corporativos se emiten desde Montevideo.{1}",Venezuela:"Entre los primeros mercados de expansión;{24} DeRemate aportó operaciones en 2008.{42}",Chile:"Portal Inmobiliario (2014); tienda de eBay en 2017;{20} lanzamiento de Mercado Envíos en Chile.{42}",Colombia:"DeRemate aportó operaciones en 2008.{42}",Perú:"Aparece en la cronología de la compañía junto con las operaciones de DeRemate (2008); fecha exacta no verificada.{42}",Ecuador:"DeRemate aportó operaciones en 2008.{42}","Costa Rica":"Lanzamiento en 2006.{20}",Panamá:"Lanzamiento en 2006.{20}","Rep. Dominicana":"Lanzamiento en 2006.{20}"};
+H.push(sec("expansion","Expansión","Mapa de mercados","Selecciona un país. No se incluyen países sin fuente verificable.",`<div class="grid g4">${Object.keys(PAIS).map(k=>`<div class="country" data-k="${k}" tabindex="0">${k}</div>`).join("")}</div><div class="pane" id="ctry"><b>Selecciona un país</b><p style="margin:8px 0 0;color:#a9bacb">Mercado Libre opera en 18 países en 2025;{37} aquí se listan solo los que tienen dato verificado.</p></div>`));
+
+H.push(sec("finanzas","Finanzas","Dashboard financiero","Millones de US$. Cifras «como se reportaron» cada año; el 10-K 2024 reclasificó 2022 (US$10.780 M) y 2023 (US$15.107 M) al incluir ingresos financieros.{3}",`<div class="tabs" id="ftab"><button class="tab on yy" data-c="rev">Ingresos</button><button class="tab" data-c="ni">Utilidad neta</button><button class="tab" data-c="oi">Resultado operativo</button></div>
+<div class="rng" id="rng"><button data-n="3">3 años</button><button data-n="5">5 años</button><button data-n="10">10 años</button><button data-n="99" class="on">Todo</button></div>
+<div class="card"><div id="ch1"></div></div>
+<div class="grid g2" style="margin-top:18px"><div class="card"><h3>Compradores únicos (millones, 4T)</h3><div id="ch2"></div></div><div class="card"><h3>Usuarios fintech activos (millones)</h3><div id="ch3"></div></div><div class="card"><h3>GMV trimestral (US$ miles de millones)</h3><div id="ch4"></div></div><div class="card"><h3>TPV trimestral (US$ miles de millones)</h3><div id="ch5"></div></div></div>
+<p style="font-size:13px;color:var(--mu)">Los gráficos de usuarios, GMV y TPV muestran solo los trimestres con dato disponible; no son series completas. Fuentes: comunicados 4T 2024 y 4T 2025{23,1}, 8-K 4T 2021 y 3T 2022{33,41}. Los puntos 4T 2022, 1T 2025 y 3T 2025 provienen de resúmenes secundarios y deben cotejarse.</p>
+<h3 style="margin:30px 0 12px">Cuadro anual</h3><div class="tw"><table id="tbl"></table></div>
+<h3 style="margin:30px 0 14px">¿Qué significa cada cosa?</h3><div class="grid g4">${[["Ingresos","Dinero que entra por ventas de servicios, productos, crédito y financieros.","Es el tamaño del negocio.","Incluye comercio y fintech."],["Resultado operativo","Ingresos menos costos y gastos operativos.","Mide el negocio antes de intereses e impuestos.","Bajó su margen en 2025 por inversión y provisiones."],["Utilidad neta","Lo que queda tras todos los costos, impuestos y efectos cambiarios.","Es la ganancia para accionistas.","2018-2020 con pérdidas o casi cero."],["GMV","Valor total de la mercadería vendida en la plataforma.","Mide la actividad comercial.","US$19,9 mil M en el 4T 2025.{1}"],["TPV","Volumen total de pagos procesados.","Mide la actividad fintech.","+42 % en el 4T 2025.{32}"],["Flujo libre ajustado","Caja generada tras inversiones.","Indica si el crecimiento se autofinancia.","+US$763 M en el 4T 2025.{32}"],["EBITDA ajustado","Resultado antes de intereses, impuestos y amortizaciones, con ajustes.","Aproxima la rentabilidad operativa.","≈US$1.130 M en el 4T 2025 (12,9 %).{21}"],["Empleados","Personas en plantilla.","Mide escala operativa.","123.670 en 2025 (secundaria).{35}"]].map((c,i)=>card(i,c[0],"",`<b>¿Qué es?</b> ${c[1]}<br><b>¿Por qué importa?</b> ${c[2]}<br><b>En Mercado Libre:</b> ${c[3]}`)).join("")}</div>`));
+
+H.push(sec("balance","Balance","Qué tiene y qué debe","Activos = pasivos + patrimonio.",`<div class="grid g2"><div class="card"><h3>Balance 2025 (US$ miles de millones)</h3><div id="don"></div></div><div>${["Activos: todo lo que la empresa posee (caja, cartera de crédito, inventarios, edificios).","Pasivos: lo que debe (depósitos de usuarios de Mercado Pago, deuda, proveedores).","Patrimonio: lo que queda para los dueños.","Explicado a los 15 años: si tienes una tienda y vale 10 pero debes 6, tu parte es 4."].map(t=>`<div class="card" style="margin-bottom:10px"><p style="margin:0">${t}</p></div>`).join("")}<div class="note">Activos 2025: US$42,7 mil M; patrimonio: US$6,75 mil M{35}. Pasivos ≈ US$36,0 mil M es un cálculo de esta página (activos − patrimonio). Verificar en el 10-K.{2}</div></div></div>`));
+
+H.push(sec("estrategias","Estrategias","Biblioteca estratégica","Cada ficha: problema → hipótesis → decisión → ejecución → resultado → aprendizaje → aplicación.",`<div class="grid g3">${STRAT.map((s,i)=>card(i,s[0],"",s[1],"s"+i,"Estrategias")).join("")}</div>`));
+
+H.push(sec("movimientos","Movimientos clave","Las jugadas grandes","Toca una tarjeta para abrirla.",`<div class="grid g4">${MOV.map((m,i)=>card(i,m[0],"",m[1].split(".")[0]+".","m"+i,"Historia")).join("")}</div>`));
+
+H.push(sec("crisis","Crisis y errores","Momentos en los que todo podía salir mal","Qué pasó → qué riesgo existía → qué hizo la empresa → qué ocurrió después. Sin afirmar causalidad no demostrada.",`<div class="grid g2">
+<div class="card"><h3>Burbuja puntocom + crisis argentina (2000-2002)</h3><p><b>Qué pasó:</b> caída del capital tecnológico y crisis en Argentina.<br><b>Riesgo:</b> quedarse sin financiación.<br><b>Empresa:</b> había levantado US$46,5 M en mayo de 2000 y gastó con disciplina.{18}<br><b>Después:</b> los fondos, según esa fuente, alcanzaron hasta la IPO de 2007.{18} <span class="tag s">FUENTE SECUNDARIA</span></p></div>
+<div class="card"><h3>Pérdidas 2018-2019</h3><p><b>Hecho:</b> pérdida neta de US$36,6 M (2018) y US$172 M (2019).{6}<br><b>Empresa:</b> recaudó capital y siguió invirtiendo en logística y fintech.{34,29}<br><b>Después:</b> ingresos 2020 casi el doble; resultado casi nulo.{6}</p></div>
+<div class="card"><h3>Inflación y tipo de cambio</h3><p><b>Hecho:</b> pérdidas cambiarias de US$615 M en 2023.{4} Inflación argentina: 117,8 % en 2024 y 31,5 % en 2025.{31}</p></div>
+<div class="card"><h3>Competencia y regulación</h3><p><b>Hecho:</b> en 2025 la autoridad de competencia de México cerró una investigación sobre algoritmos de Buy Box e integración logística sin sanciones, con posibles revisiones futuras.{31}</p></div>
+<div class="card"><h3>Menor rentabilidad en 2025</h3><p><span class="tag d">HECHO</span> margen operativo del 4T 2025: 10,1 %, resultado −25 % interanual; utilidad neta −39 %.{26}<br><span class="tag r">OPINIÓN DE ANALISTA</span> el mercado cuestionó que la rentabilidad no acompañara al crecimiento.{26}<br><span class="tag r">INTERPRETACIÓN</span> es una inversión deliberada, no demostrada como error ni acierto todavía.</p></div>
+<div class="card"><h3>Productos que no prosperaron</h3><p>No se encontraron en las fuentes consultadas cierres o fracasos de productos documentados. Queda como investigación pendiente.</p></div></div>`));
+
+H.push(sec("competencia","Competencia","Comparación por período","No es un ranking: son diferencias de modelo.",`<div class="tw"><table><thead><tr><th>Actor</th><th style="text-align:left">Relación / rol</th><th style="text-align:left">Dato verificado</th></tr></thead><tbody>
+<tr><td>eBay</td><td style="text-align:left">Modelo de referencia; accionista 2001-2016</td><td style="text-align:left">19,5 % desde 2001.{20}</td></tr>
+<tr><td>iBazar</td><td style="text-align:left">Competidor regional</td><td style="text-align:left">Brasil integrada en 2001 (secundaria); filial brasileña adquirida en abril de 2017.{20,29}</td></tr>
+<tr><td>DeRemate</td><td style="text-align:left">Competidor regional</td><td style="text-align:left">Adquirido en 2008; operaba en 7 mercados.{20,42}</td></tr>
+<tr><td>Amazon, Shopee y otros actuales</td><td style="text-align:left">No verificados</td><td style="text-align:left">Pendiente de investigar con fuentes de cada compañía.</td></tr></tbody></table></div>`));
+
+const WHY=[["Mercado","Región de 550 M de personas con Internet en rápido crecimiento (2007).{9}"],["Timing","Salida temprana; IPO en 2007.{9}"],["Tecnología","APIs abiertas (2011) y modelos propios de crédito.{20,26}"],["Capital","Rondas 1999-2000, IPO 2007 y ofertas posteriores.{10,22}"],["Producto","Marketplace con pagos y envíos integrados.{2}"],["Red","Más de 80 M de compradores trimestrales.{1}"],["Pagos","Solución a la desconfianza desde 2003.{25}"],["Logística","Fulfillment y entregas en 48 h.{1}"],["Marca","Sin dato verificado en esta pasada."],["Equipo","Continuidad de liderazgo: 26 años de Galperin como CEO.{14,37}"],["Expansión","Compras y entrada a varios países.{20}"],["Ejecución","28 trimestres seguidos con crecimiento >30 %.{32}"],["Contexto latinoamericano","Baja bancarización y logística fragmentada.{25}"]];
+H.push(sec("porque","¿Por qué funcionó?","No fue solo innovar","Trece dimensiones, cada una con evidencia. Son análisis basados en las fuentes citadas.",`<div class="grid g4">${WHY.map((w,i)=>card(i,w[0],"",w[1])).join("")}</div>
+<h3 style="margin:34px 0 14px">¿Qué parte fue suerte y qué parte estrategia?</h3><div class="grid g3">${[["Controlables","Elección de modelo, socios, pagos, logística, uso del capital."],["Externos","Adopción de Internet y smartphones; costo del capital en cada época."],["Contexto","Crisis argentina 2001-2002, pandemia 2020, inflación y tipo de cambio."],["Imprevistos","Estallido puntocom; cambios regulatorios."],["Decisiones","Aceptar a eBay, lanzar Pago, salir a bolsa, invertir en envío gratis."],["Advertencia","Ningún resultado se atribuye a una sola causa; es un análisis, no una prueba."]].map((c,i)=>card(i,c[0],"",c[1])).join("")}</div>`));
+
+const REP=[["Resolver primero un problema real","La desconfianza impedía comprar; Mercado Pago retuvo el dinero hasta la entrega.{25}","Un marketplace de nicho puede ofrecer garantía de entrega antes de crecer.","Solucionar un problema que solo tú percibes.","Un club de intercambio que retiene el pago hasta que ambos confirman."],["Construir infraestructura cuando el mercado no la tiene","Mercado Envíos estandarizó plazos.{24}","Alianza con un courier local y tarifas claras.","Sobreinvertir antes de tener volumen.","Una tienda de artesanías que ofrece envío con tarifa fija desde el día 1."],["Usar los datos propios","Datos del marketplace alimentan el crédito.{26}","Un score simple con historial de ventas.","Regulación y morosidad.","Adelantar capital de trabajo a vendedores con buen historial."],["Sacrificar margen por escala con disciplina","Envío gratis en Brasil, 2025.{21,26}","Subsidiar el envío en un ciclo acotado.","Que el subsidio no se recupere.","Envío gratis solo sobre cierto ticket, midiendo recompra."],["Alianzas y capital estratégico","eBay entró al capital en 2001.{17}","Buscar un socio con canal o tecnología.","Dependencia del socio.","Alianza con un marketplace grande para vender en otro país."]];
+H.push(sec("replicar","Cómo replicar","Lo que un emprendedor puede aprender","No es copiar Mercado Libre: son principios. Los ejemplos son hipotéticos.",REP.map((r,i)=>`<div class="acc"><button>${r[0]}</button><div class="bd">${rows({PRINCIPIO:r[0],EVIDENCIA:r[1],APLICACIÓN:r[2],RIESGO:r[3],EJEMPLO:r[4]+" (hipotético)"})}</div></div>`).join("")+`<div class="quote">¿Cómo replicar este modelo? Detecta una necesidad real, soluciona con tecnología, construye un ecosistema y piensa en largo plazo.<small>Síntesis de esta página, no una cita de Mercado Libre.</small></div>`));
+
+H.push(sec("simulador","Simulador","Construye tu propio Mercado Libre","Simulación educativa hipotética, no una proyección real.",`<div class="form" id="sf">${[["vend","Vendedores",800],["comp","Compradores",8000],["tick","Ticket promedio (US$)",45],["com","Comisión (%)",12],["frec","Compras por comprador por año",5],["cac","Costo de adquisición por comprador (US$)",6],["mar","Margen tras costos de pago y soporte (%)",75],["log","Costo logístico por pedido (US$)",2.5],["g","Crecimiento mensual de compradores (%)",4],["cap","Capital inicial (US$)",150000],["fix","Costos fijos mensuales (US$) — extra",8000]].map(f=>`<div><label>${f[1]}<input type="number" id="s_${f[0]}" value="${f[2]}" step="any"></label></div>`).join("")}</div><button class="btn y" id="sim">CALCULAR ESCENARIOS</button><div id="sout"></div>`));
+
+H.push(sec("curiosos","Datos curiosos","Hechos documentados","Cada dato lleva su fuente.",`<div class="grid g3">${[["US$22 → US$28,50","La acción abrió a US$22 y cerró su primer día a US$28,50 tras salir a US$18.{19}"],["US$9,5 M","Del IPO se canceló un préstamo con eBay por US$9,5 M.{10}"],["Fax","En 2003 los pagos llegaban por fax.{25}"],["28 trimestres","Crecimiento superior al 30 % por 28 trimestres consecutivos en el 4T 2025.{32}"],["US$85,1 M","Ingresos en 2007, con utilidad de US$9,6 M.{12}"],["2019","Los tres cofundadores se reencontraron en Stanford para su reunión de 20 años, cuando la empresa valía casi US$25.000 M.{11}"]].map((c,i)=>card(i,c[0],"",c[1])).join("")}</div>`));
+
+H.push(sec("fuentes","Fuentes","Referencias","Haz clic en una referencia [n] para abrir su ficha. Las fuentes «Secundaria» deben cotejarse con documentos primarios antes de citarse.",`<div class="tw"><table><thead><tr><th>#</th><th style="text-align:left">Documento</th><th style="text-align:left">Origen</th><th>Fecha</th><th>Tipo</th></tr></thead><tbody>${Object.entries(SRC).map(([n,s])=>`<tr data-cat="Fuentes"><td>${n}</td><td style="text-align:left"><a href="${s.u}" target="_blank" rel="noopener">${s.t}</a></td><td style="text-align:left">${s.o}</td><td>${s.d}</td><td>${s.k}</td></tr>`).join("")}</tbody></table></div>
+<div class="note"><b>Imágenes.</b> Esta versión no incluye fotografías ni el logo oficial: en el entorno de trabajo no se pudo verificar la licencia de cada imagen. Reemplaza los bloques «Imagen pendiente» con material de la Newsroom, Investor Relations o Wikimedia Commons, indicando «Fuente de imagen».</div>`));
+
+$("#main").innerHTML=H.join("")+`<div class="foot">Investigación educativa. Actualizado a 20 sep. 2026. No es asesoramiento financiero. Marca y logo de Mercado Libre pertenecen a sus titulares.</div>`;
+$("#prods").innerHTML=PR.map((p,i)=>card(i,p[0],p[1],p[2])).join("");
+$("#main").innerHTML=cite($("#main").innerHTML);
+
+/* ============ NAV ============ */
+$("#nav").innerHTML=NAV.map(([id,t])=>`<a href="#${id}" data-id="${id}">${t}</a>`).join("");
+const map={};$$("#nav a").forEach(a=>map[a.dataset.id]=a);
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&map[e.target.id]){$$("#nav a").forEach(a=>a.classList.remove("on"));map[e.target.id].classList.add("on")}}),{rootMargin:"-30% 0px -60% 0px"});
+$$("section[id]").forEach(s=>io.observe(s));
+$("#nav").addEventListener("click",e=>{if(e.target.closest("a"))$("#side").classList.remove("open")});
+$("#bg").onclick=()=>$("#side").classList.toggle("open");
+
+/* ============ MODAL ============ */
+const modal=$("#modal"),mb=$("#mb");
+function open(h){mb.innerHTML=`<button class="mx" aria-label="Cerrar">×</button>`+cite(h);modal.classList.add("on")}
+modal.addEventListener("click",e=>{if(e.target===modal||e.target.classList.contains("mx"))modal.classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remove("on")});
+function srcHtml(n){const s=SRC[n];return `<h3>Fuente [${n}]</h3>${rows({Documento:s.t,Origen:s.o,Fecha:s.d,Tipo:s.k,Enlace:`<a href="${s.u}" target="_blank" rel="noopener">${s.u}</a>`,Nota:/Secundaria/.test(s.k)?"Fuente secundaria: cotejar con un documento primario antes de citar.":"Fuente utilizada para el dato marcado."})}`}
+document.addEventListener("click",e=>{
+ const c=e.target.closest("sup.c");if(c){e.stopPropagation();mb.innerHTML=`<button class="mx">×</button>`+srcHtml(c.dataset.s);modal.classList.add("on");return}
+ const ty=e.target.closest(".ty");if(ty){const t=TL[ty.dataset.i];open(`<h3>${t.y} — ${t.t}</h3>${rows({AÑO:t.y,ACONTECIMIENTO:t.t,FECHA:t.fecha,CONTEXTO:t.ctx,DECISIÓN:t.dec,INVERSIÓN:t.inv,PRODUCTO:t.prod,RESULTADO:t.res,IMPACTO:t.imp,LECCIÓN:t.les})}<p style="margin-top:10px;font-size:13px;color:var(--mu)">Los campos vacíos no tienen dato verificado en las fuentes consultadas.</p>`);return}
+ const p=e.target.closest("[data-p]");if(p){const x=PPL[p.dataset.p];open(`<h3>${x.n}</h3><p><b>${x.r}</b></p>${x.b.map(b=>`<p>${b}</p>`).join("")}`);return}
+ const m=e.target.closest("[data-more]");if(m){const k=decodeURIComponent(m.dataset.more);const t=m.dataset.title;
+  if(k[0]==="s"){const s=STRAT[+k.slice(1)];open(`<h3>${s[0]}</h3>${rows({PROBLEMA:s[1],HIPÓTESIS:"Análisis: resolver esta fricción aumenta la frecuencia de uso y refuerza al resto del ecosistema.","DECISIÓN Y EJECUCIÓN":s[2],RESULTADO:s[3],"APRENDIZAJE Y APLICACIÓN":s[4]})}<p style="font-size:13px;color:var(--mu)">La hipótesis y la aplicación son análisis de esta página, no afirmaciones de la compañía.</p>`)}
+  else if(k[0]==="m"){const s=MOV[+k.slice(1)];open(`<h3>${s[0]}</h3><p>${s[1]}</p>`)}
+  return}
+ const co=e.target.closest(".country");if(co){$$(".country").forEach(x=>x.classList.remove("on"));co.classList.add("on");$("#ctry").innerHTML=cite(`<b>${co.dataset.k}</b><p style="margin:8px 0 0;color:#e8eef5">${PAIS[co.dataset.k]}</p>`);return}
+ const ac=e.target.closest(".acc button");if(ac)ac.parentElement.classList.toggle("on");
+});
+
+/* ============ FUNDADOR ============ */
+const FT=[
+"<div class='grid g2'><div class='card'><h3>Stanford GSB (MBA, 1999)</h3><p>Galperin cursó el MBA en Stanford; Kazah y Tolda, sus compañeros de clase, se graduaron en 1999 y se sumaron al proyecto.{11}</p></div><div class='card'><h3>Wharton (Univ. de Pennsylvania)</h3><p>Indicada por el enunciado de esta investigación y por fuentes secundarias: economía y finanzas, 1994.{39} Verificar en una fuente primaria.</p></div></div>",
+"<div class='card'><h3>Antes de Mercado Libre</h3><p>Fuentes secundarias mencionan experiencia en YPF y JP Morgan; no se incluyó más detalle porque no se pudo verificar.{39} Infancia y familia: no se incluye información no documentada.</p></div>",
+"<div class='grid g2'><div class='card'><h3>1999-2025: CEO</h3><p>Fue CEO durante 26 años.{14,37}</p></div><div class='card'><h3>Desde 2026: presidente ejecutivo</h3><p>Se enfoca en estrategia, evolución del producto, cultura, asignación de capital, proyectos específicos y uso de inteligencia artificial.{37}</p></div></div>",
+"<div class='grid g2'>"+["Salir a buscar capital (1999)","Vender el 19,5 % a eBay (2001)","Lanzar Mercado Pago (2003)","Salir a bolsa (2007)","Invertir sobre el margen en logística y envío gratis","Planificar la sucesión (2025)"].map((d,i)=>`<div class='card'><h3>${d}</h3><p>Ver historia y financiación para el contexto y el resultado.</p></div>`).join("")+"</div>",
+"<div class='grid g2'><div class='quote'>«If I were to start something new, it would be within Mercado Libre»<small>Marcos Galperin, entrevista a Reuters, septiembre de 2024, citado por Mexico Business News.{30}</small></div><div class='quote'>«Mercado Libre must transcend my generation and me as founder»<small>Marcos Galperin, carta pública, 21 de mayo de 2025.{16}</small></div></div><p style='color:#a9bacb;margin-top:14px'>Análisis basado en esas citas: la mirada es de largo plazo y de institucionalización de la empresa.</p>",
+"<div class='grid g3'>"+[["Equipo","Los socios pactaron reglas de equity desde el inicio.{11}"],["Persistencia","La empresa sobrevivió a la crisis 2000-2002 con capital disciplinado.{18}"],["Sucesión planificada","Relevo a un directivo interno con casi una década en la compañía.{14}"]].map((c,i)=>`<div class='card'><h3>${c[0]}</h3><p>${c[1]}</p></div>`).join("")+"</div>"];
+function ft(i){$("#fbody").innerHTML=cite(FT[i])}ft(0);
+$("#ftabs").onclick=e=>{const b=e.target.closest(".tab");if(!b)return;$$("#ftabs .tab").forEach(x=>x.className="tab");b.className="tab on yy";ft(+b.dataset.t)};
+
+/* ============ GRÁFICOS ============ */
+const tip=$("#tip");
+function svgChart(el,labels,vals,type,fmt){
+ const W=680,Hh=260,p={l:54,r:14,t:16,b:30},mx=Math.max(...vals,0),mn=Math.min(...vals,0),rg=(mx-mn)||1;
+ const X=i=>p.l+(vals.length==1?(W-p.l-p.r)/2:i*(W-p.l-p.r)/(vals.length-1)),bw=(W-p.l-p.r)/vals.length;
+ const Y=v=>p.t+(mx-v)*(Hh-p.t-p.b)/rg;let s=`<svg class="chart" viewBox="0 0 ${W} ${Hh}">`;
+ for(let k=0;k<=4;k++){const v=mn+rg*k/4,y=Y(v);s+=`<line class="gl" x1="${p.l}" x2="${W-p.r}" y1="${y}" y2="${y}"/><text x="${p.l-6}" y="${y+4}" text-anchor="end">${fmt(v)}</text>`}
+ if(type==="bar"){vals.forEach((v,i)=>{const x=p.l+i*bw+bw*.18,h=Math.abs(Y(v)-Y(0));s+=`<rect x="${x}" y="${Math.min(Y(v),Y(0))}" width="${bw*.64}" height="${h}" rx="4" fill="#FFE600" stroke="#c9b800" data-t="${labels[i]}: ${fmt(v)}"/><text x="${x+bw*.32}" y="${Hh-10}" text-anchor="middle">${labels[i]}</text>`})}
+ else{const pts=vals.map((v,i)=>[X(i),Y(v)]);const d=pts.map((q,i)=>(i?"L":"M")+q[0]+" "+q[1]).join(" ");
+  if(type==="area")s+=`<path d="${d} L${pts[pts.length-1][0]} ${Y(0)} L${pts[0][0]} ${Y(0)}Z" fill="rgba(255,230,0,.35)"/>`;
+  s+=`<path d="${d}" fill="none" stroke="#3483FA" stroke-width="3" stroke-linejoin="round"/>`;
+  pts.forEach((q,i)=>{s+=`<circle cx="${q[0]}" cy="${q[1]}" r="5" fill="#FFE600" stroke="#3483FA" stroke-width="2" data-t="${labels[i]}: ${fmt(vals[i])}"/><text x="${q[0]}" y="${Hh-10}" text-anchor="middle">${labels[i]}</text>`})}
+ el.innerHTML=s+"</svg>"}
+document.addEventListener("mousemove",e=>{const t=e.target.closest&&e.target.closest("[data-t]");if(t&&t.ownerSVGElement){tip.style.display="block";tip.textContent=t.dataset.t;tip.style.left=e.clientX+12+"px";tip.style.top=e.clientY+12+"px"}else tip.style.display="none"});
+const A=["2006","2007","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"];
+const D={rev:[52.1,85.1,472.6,556.5,651.8,844.4,1216.5,1439.7,2296.3,3973.5,7069,10537,14473,20800,28890],
+ ni:[null,9.6,117.5,72.7,105.8,136.4,13.8,-36.6,-172,-0.7,83,482,987,1911,1990],
+ oi:[null,null,null,null,null,null,null,-69.5,-153.2,127.7,441,1034,1823,2640,3200]};
+let cur="rev",rn=99;
+function draw(){const L=[],V=[];A.forEach((a,i)=>{if(D[cur][i]!=null){L.push(a);V.push(D[cur][i])}});const k=rn>=99?L.length:Math.min(rn,L.length);
+ svgChart($("#ch1"),L.slice(-k),V.slice(-k),cur==="rev"?"line":"bar",fmtM)}
+$("#ftab").onclick=e=>{const b=e.target.closest(".tab");if(!b)return;$$("#ftab .tab").forEach(x=>x.className="tab");b.className="tab on yy";cur=b.dataset.c;draw()};
+$("#rng").onclick=e=>{const b=e.target.closest("button");if(!b)return;$$("#rng button").forEach(x=>x.classList.remove("on"));b.classList.add("on");rn=+b.dataset.n;draw()};
+draw();
+svgChart($("#ch2"),["4T22","4T24","4T25"],[46,67,83],"area",v=>Math.round(v)+" M");
+svgChart($("#ch3"),["4T24","1T25","3T25","4T25"],[61,64,72,78],"area",v=>Math.round(v)+" M");
+svgChart($("#ch4"),["4T21","3T22","4T24","3T25","4T25"],[8.0,8.6,14.5,16.5,19.9],"bar",v=>"US$"+v.toFixed(1));
+svgChart($("#ch5"),["4T21","3T22","4T22","4T24"],[24.2,32.2,36.0,58.9],"line",v=>"US$"+v.toFixed(0));
+$("#tbl").innerHTML=`<thead><tr><th>Año</th><th>Ingresos</th><th>Resultado operativo</th><th>Utilidad neta</th></tr></thead><tbody>`+A.slice(7).map((a,i)=>{i+=7;return `<tr><td>${a}</td><td>${fmtM(D.rev[i])}</td><td>${fmtM(D.oi[i])}</td><td>${fmtM(D.ni[i])}</td></tr>`}).join("")+`</tbody><caption style="caption-side:bottom;font-size:12px;color:var(--mu);padding-top:8px;text-align:left">2024 y 2025: ≈ derivados de comunicados y de cifras redondeadas por la fuente. 2021 y 2025: utilidad neta aprox.{6,4,34,1,28,35}</caption>`;
+$("#tbl").innerHTML=cite($("#tbl").innerHTML);
+/* donut */
+(function(){const a=42.7,e=6.75,l=a-e,C=2*Math.PI*60;const seg=(v,o,c)=>`<circle r="60" cx="90" cy="90" fill="none" stroke="${c}" stroke-width="34" stroke-dasharray="${v/a*C} ${C}" stroke-dashoffset="${-o/a*C}" transform="rotate(-90 90 90)"/>`;
+ $("#don").innerHTML=`<svg viewBox="0 0 180 180" style="width:210px;display:block;margin:0 auto">${seg(l,0,"#3483FA")}${seg(e,l,"#FFE600")}<text x="90" y="86" text-anchor="middle" style="font-size:14px;font-weight:800;fill:var(--tx)">US$42,7</text><text x="90" y="102" text-anchor="middle" style="font-size:10px;fill:var(--mu)">mil M de activos</text></svg><p style="text-align:center;font-size:13px;margin:10px auto"><b style="color:#3483FA">■</b> Pasivos ≈ ${l.toFixed(1).replace(".",",")} &nbsp; <b style="color:#c9b800">■</b> Patrimonio ${e.toFixed(2).replace(".",",")}</p>`})();
+
+/* ============ SIMULADOR ============ */
+function sim(m){const g=v=>+$("#s_"+v).value||0,vend=g("vend"),comp=g("comp"),tick=g("tick"),com=g("com")/100,fr=g("frec"),cac=g("cac"),mar=g("mar")/100,lg=g("log"),cg=g("g")/100*m,cap=g("cap"),fix=g("fix");
+ let cash=cap,minC=cap,be=null,rev12=0,cost12=0,b=comp,rows=[];
+ for(let t=1;t<=36;t++){const nb=comp*Math.pow(1+cg,t),nw=nb-b;b=nb;const ord=nb*fr/12,gmv=ord*tick,rev=gmv*com*mar,logc=ord*lg,ac=Math.max(nw,0)*cac,res=rev-logc-ac-fix;cash+=res;minC=Math.min(minC,cash);if(be===null&&res>0)be=t;if(t<=12){rev12+=rev;cost12+=logc+ac+fix}rows.push(cash)}
+ return{rev12,cost12,mg:rev12?(rev12-cost12)/rev12:0,be,need:Math.max(cap-minC,0),end:cash,rows,gmvSel:comp*fr*tick/Math.max(vend,1)}}
+$("#sim").onclick=()=>{const S=[["Conservador",.5],["Base",1],["Agresivo",1.5]].map(([n,m])=>[n,sim(m)]);
+ $("#sout").innerHTML=`<div class="sc">${S.map(([n,s])=>`<div class="card"><h3>${n}</h3><p>Ingresos año 1: <b>US$${Math.round(s.rev12).toLocaleString("es")}</b><br>Costos año 1: <b>US$${Math.round(s.cost12).toLocaleString("es")}</b><br>Margen año 1: <b>${(s.mg*100).toFixed(0)} %</b><br>Punto de equilibrio: <b>${s.be?"mes "+s.be:"no en 36 meses"}</b><br>Capital necesario (mín. caja): <b>US$${Math.round(s.need).toLocaleString("es")}</b><br>Caja al mes 36: <b>US$${Math.round(s.end).toLocaleString("es")}</b></p></div>`).join("")}</div><div class="card"><h3>Caja acumulada (US$)</h3><div id="sch"></div></div><p style="font-size:13px;color:var(--mu)">Modelo simplificado: los ingresos son la comisión × margen; los costos son logística por pedido, adquisición de compradores nuevos y costos fijos. Los escenarios multiplican el crecimiento mensual por 0,5 / 1 / 1,5. Es una simulación hipotética.</p>`;
+ const sv=S.map(x=>x[1].rows);const W=680,H2=240,mx=Math.max(...sv.flat()),mn=Math.min(...sv.flat()),rg=(mx-mn)||1,Y=v=>14+(mx-v)*(H2-40)/rg,X=i=>50+i*620/35;const col=["#667085","#3483FA","#c9b800"];
+ let s=`<svg class="chart" viewBox="0 0 ${W} ${H2}"><line class="gl" x1="50" x2="670" y1="${Y(0)}" y2="${Y(0)}"/>`;
+ sv.forEach((r,k)=>{s+=`<path d="${r.map((v,i)=>(i?"L":"M")+X(i)+" "+Y(v)).join(" ")}" fill="none" stroke="${col[k]}" stroke-width="3"/>`});
+ [0,12,24,35].forEach(i=>s+=`<text x="${X(i)}" y="${H2-8}" text-anchor="middle">mes ${i+1}</text>`);
+ s+=`<text x="50" y="12">${fmtM(mx/1e6)}</text><text x="600" y="30" style="fill:#667085">gris cons. · azul base · amarillo agr.</text></svg>`;$("#sch").innerHTML=s};
+
+/* ============ TEMA, KPIs, REVEAL ============ */
+const th=$("#th"),root=document.documentElement;
+function setTh(t){root.dataset.theme=t;th.textContent=t==="dark"?"Modo claro":"Modo oscuro";try{localStorage.setItem("ml_theme",t)}catch(e){}}
+let saved=null;try{saved=localStorage.getItem("ml_theme")}catch(e){}
+setTh(saved||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
+th.onclick=()=>setTh(root.dataset.theme==="dark"?"light":"dark");
+const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in2");io2.unobserve(e.target)}}),{threshold:.08});
+$$(".reveal").forEach(x=>io2.observe(x));
+$$("[data-c]").forEach(el=>{const to=parseFloat(el.dataset.c),d=el.dataset.d?1:0;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const t0=performance.now();(function f(t){const k=Math.min((t-t0)/1200,1),v=to*(1-Math.pow(1-k,3));el.textContent=d?v.toFixed(1).replace(".",","):Math.round(v).toString();if(k<1)requestAnimationFrame(f)})(t0)});
+
+/* ============ BUSCADOR ============ */
+const IDX=[];
+TL.forEach((t,i)=>IDX.push({c:"Historia",t:t.y+" — "+t.t,x:JSON.stringify(t),f:()=>$$(".ty")[i].click()}));
+PPL.forEach((p,i)=>IDX.push({c:"Personas",t:p.n,x:p.r+p.b.join(" "),f:()=>$$("[data-p]")[i].click()}));
+STRAT.forEach((s,i)=>IDX.push({c:"Estrategias",t:s[0],x:s.join(" "),f:()=>location.hash="#estrategias"}));
+[["Ingresos y utilidad","finanzas"],["Balance","balance"],["Simulador","simulador"],["Salida a bolsa (IPO)","financiacion"],["Mercado Pago","pago"],["Mercado Envíos","envios"],["Mercado Crédito","credito"],["Mercado Ads","ads"],["Brasil","expansion"],["Financiación","financiacion"],["eBay","competencia"]].forEach(([t,h])=>IDX.push({c:/Ingresos|Balance|IPO|Financ/.test(t)?"Finanzas":"Productos",t,x:t,f:()=>location.hash="#"+h}));
+Object.entries(SRC).forEach(([n,s])=>IDX.push({c:"Fuentes",t:`[${n}] ${s.t}`,x:s.o+" "+s.d,f:()=>{mb.innerHTML=`<button class="mx">×</button>`+srcHtml(n);modal.classList.add("on")}}));
+$("#q").addEventListener("input",e=>{const q=e.target.value.trim().toLowerCase();if(q.length<2)return;
+ const r=IDX.filter(i=>(i.t+" "+i.x).toLowerCase().includes(q)),G={};r.forEach(i=>(G[i.c]=G[i.c]||[]).push(i));
+ window.__r=r;let h=`<h3>Resultados para «${e.target.value}»</h3><div class="res">`;
+ if(!r.length)h+="<p>Sin resultados. Prueba con otra palabra.</p>";
+ ["Historia","Personas","Finanzas","Productos","Estrategias","Fuentes"].forEach(c=>{if(G[c])h+=`<h4>${c.toUpperCase()}</h4>`+G[c].slice(0,8).map(i=>`<a data-ri="${r.indexOf(i)}">${i.t}</a>`).join("")});
+ mb.innerHTML=`<button class="mx">×</button>`+h+"</div>";modal.classList.add("on");$("#q").focus()});
+mb.addEventListener("click",e=>{const a=e.target.closest("[data-ri]");if(a){const it=window.__r[a.dataset.ri];modal.classList.remove("on");setTimeout(()=>it.f(),50)}});
+</script>
+</body>
+</html>
